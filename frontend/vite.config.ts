@@ -10,13 +10,6 @@ export default defineConfig({
     port: 5173,
   },
 
-  // Solution pour l'erreur "react-is" avec Recharts
-  resolve: {
-    alias: {
-      'react-is': '/app/frontend/node_modules/react-is',
-    },
-  },
-
   build: {
     chunkSizeWarningLimit: 1000,
   },

@@ -20,7 +20,7 @@ from app.schemas.sender_id import SenderIDCreate, SenderIDResponse
 from app.schemas.contact import ContactCreate, ContactResponse, GroupCreate, GroupResponse, GroupUpdate
 from app.schemas.campaign import CampaignCreate, CampaignResponse, MessageResponse
 from app.services.sms_gateway import sms_gateway
-from app.utils.dependencies import get_current_user, require_active_client
+from app.utils.dependencies import require_active_client, require_client
 from app.utils.phone import normalize_phone
 
 router = APIRouter(prefix="/client", tags=["Espace Client"])
@@ -28,7 +28,7 @@ router = APIRouter(prefix="/client", tags=["Espace Client"])
 
 # --- Profil ---
 @router.get("/me")
-def get_profile(user: User = Depends(get_current_user)):
+def get_profile(user: User = Depends(require_client)):
     return {
         "id": user.id, "email": user.email, "first_name": user.first_name,
         "last_name": user.last_name, "company": user.company, "phone": user.phone,
@@ -39,13 +39,13 @@ def get_profile(user: User = Depends(get_current_user)):
 
 # --- Balance ---
 @router.get("/balance")
-def get_balance(user: User = Depends(get_current_user)):
+def get_balance(user: User = Depends(require_client)):
     return {"sms_balance": user.sms_balance, "email": user.email}
 
 
 # --- Packs disponibles ---
 @router.get("/packs", response_model=list[SmsPackResponse])
-def list_available_packs(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+def list_available_packs(db: Session = Depends(get_db), user: User = Depends(require_client)):
     return db.query(SmsPack).filter(SmsPack.is_active == True).order_by(SmsPack.price.asc()).all()
 
 
@@ -88,7 +88,7 @@ def purchase_pack(data: PurchaseRequest, db: Session = Depends(get_db), user: Us
 
 # --- Historique des transactions ---
 @router.get("/transactions")
-def my_transactions(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+def my_transactions(db: Session = Depends(get_db), user: User = Depends(require_client)):
     txs = db.query(Transaction).filter(Transaction.user_id == user.id).order_by(Transaction.created_at.desc()).all()
     return [{
         "id": tx.id, "transaction_type": tx.transaction_type.value,
@@ -99,7 +99,7 @@ def my_transactions(db: Session = Depends(get_db), user: User = Depends(get_curr
 
 # --- Sender IDs ---
 @router.get("/senders", response_model=list[SenderIDResponse])
-def list_my_senders(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+def list_my_senders(db: Session = Depends(get_db), user: User = Depends(require_client)):
     return db.query(SenderID).filter(SenderID.user_id == user.id).order_by(SenderID.created_at.desc()).all()
 
 
@@ -138,7 +138,7 @@ def create_sender(data: SenderIDCreate, db: Session = Depends(get_db), user: Use
 
 # --- Contacts ---
 @router.get("/contacts", response_model=list[ContactResponse])
-def list_contacts(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+def list_contacts(db: Session = Depends(get_db), user: User = Depends(require_client)):
     return db.query(Contact).filter(Contact.user_id == user.id).order_by(Contact.created_at.desc()).all()
 
 
@@ -292,7 +292,7 @@ async def import_contacts(
 
 
 @router.delete("/contacts/{contact_id}")
-def delete_contact(contact_id: str, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+def delete_contact(contact_id: str, db: Session = Depends(get_db), user: User = Depends(require_client)):
     contact = db.query(Contact).filter(Contact.id == contact_id, Contact.user_id == user.id).first()
     if not contact:
         raise HTTPException(status_code=404, detail="Contact introuvable")
@@ -303,7 +303,7 @@ def delete_contact(contact_id: str, db: Session = Depends(get_db), user: User = 
 
 # --- Groupes ---
 @router.get("/groups")
-def list_groups(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+def list_groups(db: Session = Depends(get_db), user: User = Depends(require_client)):
     groups = db.query(Group).filter(Group.user_id == user.id).order_by(Group.created_at.desc()).all()
     result = []
     for g in groups:
@@ -328,7 +328,7 @@ def create_group(data: GroupCreate, db: Session = Depends(get_db), user: User = 
 
 
 @router.get("/groups/{group_id}/contacts")
-def get_group_contacts(group_id: str, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+def get_group_contacts(group_id: str, db: Session = Depends(get_db), user: User = Depends(require_client)):
     group = db.query(Group).filter(Group.id == group_id, Group.user_id == user.id).first()
     if not group:
         raise HTTPException(status_code=404, detail="Groupe introuvable")
@@ -338,7 +338,7 @@ def get_group_contacts(group_id: str, db: Session = Depends(get_db), user: User 
 
 
 @router.delete("/groups/{group_id}")
-def delete_group(group_id: str, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+def delete_group(group_id: str, db: Session = Depends(get_db), user: User = Depends(require_client)):
     group = db.query(Group).filter(Group.id == group_id, Group.user_id == user.id).first()
     if not group:
         raise HTTPException(status_code=404, detail="Groupe introuvable")
@@ -513,12 +513,12 @@ def create_campaign(
 
 
 @router.get("/campaigns", response_model=list[CampaignResponse])
-def list_campaigns(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+def list_campaigns(db: Session = Depends(get_db), user: User = Depends(require_client)):
     return db.query(Campaign).filter(Campaign.user_id == user.id).order_by(Campaign.created_at.desc()).all()
 
 
 @router.get("/campaigns/{campaign_id}", response_model=CampaignResponse)
-def get_campaign(campaign_id: str, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+def get_campaign(campaign_id: str, db: Session = Depends(get_db), user: User = Depends(require_client)):
     campaign = db.query(Campaign).filter(Campaign.id == campaign_id, Campaign.user_id == user.id).first()
     if not campaign:
         raise HTTPException(status_code=404, detail="Campagne introuvable")
@@ -526,7 +526,7 @@ def get_campaign(campaign_id: str, db: Session = Depends(get_db), user: User = D
 
 
 @router.get("/campaigns/{campaign_id}/messages", response_model=list[MessageResponse])
-def get_campaign_messages(campaign_id: str, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+def get_campaign_messages(campaign_id: str, db: Session = Depends(get_db), user: User = Depends(require_client)):
     campaign = db.query(Campaign).filter(Campaign.id == campaign_id, Campaign.user_id == user.id).first()
     if not campaign:
         raise HTTPException(status_code=404, detail="Campagne introuvable")
@@ -535,7 +535,7 @@ def get_campaign_messages(campaign_id: str, db: Session = Depends(get_db), user:
 
 # --- Notifications ---
 @router.get("/notifications")
-def list_notifications(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+def list_notifications(db: Session = Depends(get_db), user: User = Depends(require_client)):
     notifs = db.query(Notification).filter(Notification.user_id == user.id).order_by(Notification.created_at.desc()).limit(50).all()
     return [{
         "id": n.id, "title": n.title, "message": n.message,
@@ -545,7 +545,7 @@ def list_notifications(db: Session = Depends(get_db), user: User = Depends(get_c
 
 
 @router.patch("/notifications/{notif_id}/read")
-def mark_notification_read(notif_id: str, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+def mark_notification_read(notif_id: str, db: Session = Depends(get_db), user: User = Depends(require_client)):
     notif = db.query(Notification).filter(Notification.id == notif_id, Notification.user_id == user.id).first()
     if notif:
         notif.is_read = True
@@ -555,7 +555,7 @@ def mark_notification_read(notif_id: str, db: Session = Depends(get_db), user: U
 
 # --- Rapports client ---
 @router.get("/reports")
-def client_reports(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+def client_reports(db: Session = Depends(get_db), user: User = Depends(require_client)):
     campaigns = db.query(Campaign).filter(Campaign.user_id == user.id).all()
     total_sent = sum(c.sent_count for c in campaigns)
     total_delivered = sum(c.delivered_count for c in campaigns)

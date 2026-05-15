@@ -19,8 +19,8 @@ Puis :
 
 | Rôle | Email | Password |
 |------|-------|----------|
-| Admin Sygalin | admin@sygalin.com | Admin@2026 |
-| Client Test | client@test.com | Client@123 |
+| Admin Sygalin | admin@sygalin.com | Valeur de `SYGALIN_ADMIN_PASSWORD` |
+| Client Test | client@test.com | Valeur de `SYGALIN_TEST_CLIENT_PASSWORD` |
 
 ---
 
@@ -201,7 +201,7 @@ Status = COMPLETED ✅
 - [ ] Docker running (`docker compose ps`)
 - [ ] Backend UP (`curl http://localhost:8000/api/v1`)
 - [ ] Frontend UP (`http://localhost:5173`)
-- [ ] Login OK (admin@sygalin.com / Admin@2026)
+- [ ] Login OK (admin@sygalin.com / valeur de `SYGALIN_ADMIN_PASSWORD`)
 - [ ] SMS test OK (`POST /client/sms/test-send`)
 - [ ] Campaign OK (`POST /client/campaigns`)
 - [ ] Messages visible (`GET /client/campaigns/{id}/messages`)

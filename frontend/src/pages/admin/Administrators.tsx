@@ -245,7 +245,7 @@ export const Administrators = () => {
                 <label className="text-sm font-medium text-slate-700">Mot de passe provisoire <span className="text-red-500">*</span></label>
                 <Input 
                   type="text"
-                  placeholder="Admin@2026..."
+                  placeholder="Mot de passe securise..."
                   value={newAdmin.password}
                   onChange={e => setNewAdmin({...newAdmin, password: e.target.value})}
                 />

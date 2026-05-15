@@ -77,8 +77,8 @@ Une fois les deux serveurs lancés, ouvrez votre navigateur sur `http://localhos
 
 | Rôle | Email | Mot de passe |
 | :--- | :--- | :--- |
-| **Administrateur** | `admin@sygalin.com` | `Admin@2026` |
-| **Client** | `client@example.com` | `Client@2026` |
+| **Administrateur** | `admin@sygalin.com` | Valeur de `SYGALIN_ADMIN_PASSWORD` dans `.env` |
+| **Client** | `client@example.com` | Valeur de `SYGALIN_TEST_CLIENT_PASSWORD` si vous creez un compte de test |
 
 ---
 

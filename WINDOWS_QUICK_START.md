@@ -187,7 +187,7 @@ Invoke-WebRequest -Uri http://localhost:8000/api/v1
 # Login
 $body = @{
     email = "admin@sygalin.com"
-    password = "Admin@2026"
+    password = "<SYGALIN_ADMIN_PASSWORD>"
 } | ConvertTo-Json
 
 $response = Invoke-WebRequest -Uri http://localhost:8000/api/v1/auth/login `
@@ -214,7 +214,7 @@ Invoke-WebRequest -Uri http://localhost:8000/api/v1/client/me `
      ```json
      {
        "email": "admin@sygalin.com",
-       "password": "Admin@2026"
+       "password": "<SYGALIN_ADMIN_PASSWORD>"
      }
      ```
    - Copier le `access_token` reçu
@@ -229,7 +229,7 @@ Invoke-WebRequest -Uri http://localhost:8000/api/v1/client/me `
 # Si cURL n'est pas disponible en PowerShell, utiliser :
 curl.exe -X POST http://localhost:8000/api/v1/auth/login `
   -H "Content-Type: application/json" `
-  -d '{\"email\":\"admin@sygalin.com\",\"password\":\"Admin@2026\"}'
+  -d '{\"email\":\"admin@sygalin.com\",\"password\":\"<SYGALIN_ADMIN_PASSWORD>\"}'
 ```
 
 ---
@@ -243,8 +243,8 @@ http://localhost:5173
 ```
 
 Comptes de test :
-- Admin : admin@sygalin.com / Admin@2026
-- Client : client@test.com / Client@123
+- Admin : admin@sygalin.com / valeur de `SYGALIN_ADMIN_PASSWORD`
+- Client : client@test.com / valeur de `SYGALIN_TEST_CLIENT_PASSWORD`
 
 ### Documentation API
 

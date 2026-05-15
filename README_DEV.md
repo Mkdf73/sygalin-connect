@@ -304,7 +304,7 @@ docker compose logs redis
 
 ### Admin
 - Email : `admin@sygalin.com`
-- Mot de passe : `Admin@2026`
+- Mot de passe : valeur de `SYGALIN_ADMIN_PASSWORD` dans `.env`
 
 ### Client
 - Email : `client@example.com`

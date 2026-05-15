@@ -33,13 +33,13 @@ Cherchez : `"Compte admin Sygalin créé"` ou similaire.
 ### Admin Sygalin
 ```
 Email: admin@sygalin.com
-Mot de passe: Admin@2026
+Mot de passe: valeur de `SYGALIN_ADMIN_PASSWORD` dans `.env`
 ```
 
 ### Client Test
 ```
 Email: client@test.com
-Mot de passe: Client@123
+Mot de passe: valeur de `SYGALIN_TEST_CLIENT_PASSWORD`
 ```
 
 > **Note** : Le compte client est auto-créé lors de la première inscription. Utilisez l'admin pour approuver les Sender IDs.

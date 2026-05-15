@@ -1,8 +1,8 @@
+import { CheckCircle2, Loader2, Mail, Send } from "lucide-react";
 import { useState } from "react";
 import api from "../lib/axios";
-import { useToastStore } from "../store/useToastStore";
-import { Send, Mail, Loader2, CheckCircle2 } from "lucide-react";
 import { cn } from "../lib/utils";
+import { useToastStore } from "../store/useToastStore";
 
 export const TestEmail = () => {
   const [email, setEmail] = useState("");
@@ -18,7 +18,7 @@ export const TestEmail = () => {
     setIsLoading(true);
     try {
       const response = await api.post("/send-test-email", { email });
-      toast.success(response.data.detail || "Email envoyé avec succès");
+      toast.success(response.data.detail || "Email envoye avec succes");
       setEmail("");
     } catch (err: any) {
       const detail = err.response?.data?.detail;
@@ -37,7 +37,7 @@ export const TestEmail = () => {
           </div>
           <h2 className="text-2xl font-bold tracking-tight">Email de Test</h2>
           <p className="text-blue-100 text-sm mt-1 opacity-90">
-            Vérifiez la configuration de votre serveur SMTP
+            Verifiez la configuration de votre serveur SMTP
           </p>
         </div>
 
@@ -53,6 +53,7 @@ export const TestEmail = () => {
               <input
                 id="email"
                 type="email"
+                autoComplete="email"
                 placeholder="ex: destinataire@sygalin.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -87,7 +88,8 @@ export const TestEmail = () => {
           <div className="flex items-center gap-3 p-4 bg-blue-50 rounded-xl border border-blue-100/50">
             <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" />
             <p className="text-xs text-blue-700 leading-relaxed">
-              Ce test utilise la configuration SMTP de <strong>mail.sygalin.com</strong> sur le port <strong>465 (SSL)</strong>.
+              Ce test utilise la configuration SMTP active du backend. SSL ou STARTTLS est choisi
+              automatiquement selon le port configure.
             </p>
           </div>
         </div>

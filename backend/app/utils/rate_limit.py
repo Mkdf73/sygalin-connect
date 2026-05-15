@@ -1,4 +1,5 @@
-from fastapi import Request, HTTPException
+from fastapi import Request
+from fastapi.responses import JSONResponse
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
@@ -16,7 +17,7 @@ limiter = Limiter(
 
 async def rate_limit_error_handler(request: Request, exc: RateLimitExceeded):
     logger.warning(f"Rate limit exceeded for {get_remote_address(request)}")
-    raise HTTPException(
+    return JSONResponse(
         status_code=429,
-        detail="Too many requests. Please try again later.",
+        content={"detail": "Trop de tentatives. Veuillez reessayer plus tard."},
     )

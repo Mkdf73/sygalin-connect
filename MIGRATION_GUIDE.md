@@ -198,7 +198,7 @@ curl http://localhost:8000/api/v1
 curl http://localhost:8000/api/v1/auth/login \
   -X POST \
   -H "Content-Type: application/json" \
-  -d '{"email": "admin@sygalin.com", "password": "Admin@2026"}'
+  -d '{"email": "admin@sygalin.com", "password": "<SYGALIN_ADMIN_PASSWORD>"}'
 ```
 
 ✅ **Migration SQLite → PostgreSQL terminée !**
@@ -315,7 +315,7 @@ Résultat Attendu :
 # Login
 curl -X POST http://localhost:8000/api/v1/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email": "admin@sygalin.com", "password": "Admin@2026"}'
+  -d '{"email": "admin@sygalin.com", "password": "<SYGALIN_ADMIN_PASSWORD>"}'
 
 # Lister les utilisateurs (admin)
 curl http://localhost:8000/api/v1/admin/users \
