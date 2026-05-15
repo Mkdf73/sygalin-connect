@@ -1,0 +1,29 @@
+# Python
+**/__pycache__
+**/*.pyc
+**/*.pyo
+**/*.pyd
+backend/__pycache__
+backend/**/*.pyc
+
+# Node
+node_modules
+frontend/node_modules
+
+# Build
+dist
+build
+
+# Environment
+.env
+**/.env
+
+# Database
+**/*.db
+backend/sygalin_connect.db
+
+# OS
+.DS_Store
+
+# Logs
+*.log
