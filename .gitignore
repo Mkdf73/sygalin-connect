@@ -34,3 +34,6 @@ temp_*.txt
 
 # Local generated files
 temp_reset_link.txt
+
+# Private documents
+*.docx
